@@ -80,6 +80,7 @@ export default function DietaScreen({ onOpenListaCompras }) {
               <p className="text-xs text-gray-500">{ref.kcal}</p>
             </div>
             <div className="flex gap-2">
+              {/* Removido o botão de recarregar a pedido da diva */}
               <button 
                 onClick={() => toggleCheck(ref.id)}
                 className={`w-10 h-10 rounded-xl flex items-center justify-center transition border-2 ${

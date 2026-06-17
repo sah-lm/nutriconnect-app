@@ -10,13 +10,11 @@ import BottomNav from './components/BottomNav';
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState('login');
   
-  // O NOSSO BANCO DE DADOS GERAL
   const [userData, setUserData] = useState({
     name: 'João Silva',
     age: '26',
     email: '',
-    spent: 480, // O quanto já foi gasto!
-    totalBudget: 1000, // O orçamento total (editável no perfil)
+    totalBudget: 1000,
     weight: '79.4',
     height: '1.82',
     fat: '12.5',
@@ -26,23 +24,42 @@ export default function App() {
   });
 
   // O NOSSO BANCO DE DADOS DA LISTA DE COMPRAS
+  // Começamos com os itens fixos da Nutri, que juntos dão R$ 480!
+  const [shoppingList, setShoppingList] = useState([
+    { id: 'n1', nome: "Filé de Frango (3kg)", preco: 150.00, origin: 'nutri', bought: false },
+    { id: 'n2', nome: "Ovos (3 dúzias)", preco: 50.00, origin: 'nutri', bought: false },
+    { id: 'n3', nome: "Pão Integral & Aveia", preco: 50.00, origin: 'nutri', bought: false },
+    { id: 'n4', nome: "Iogurte Natural", preco: 40.00, origin: 'nutri', bought: false },
+    { id: 'n5', nome: "Batata Doce (2kg)", preco: 30.00, origin: 'nutri', bought: false },
+    { id: 'n6', nome: "Macarrão Integral", preco: 20.00, origin: 'nutri', bought: false },
+    { id: 'n7', nome: "Patinho (3kg)", preco: 140.00, origin: 'nutri', bought: false }
+  ]);
+
   const [homeItems, setHomeItems] = useState([
-    { id: 'patinho', nome: "Patinho moído 500g", loja: "Supermercado Central", preco: 20.80, icone: "🥩", bg: "bg-red-100", color: "text-red-800" },
+    { id: 'patinho_promo', nome: "Patinho moído 500g", loja: "Supermercado Central", preco: 20.80, icone: "🥩", bg: "bg-red-100", color: "text-red-800" },
     { id: 'banana', nome: "Cacho de banana-prata", loja: "Hortifrúti do Bairro", preco: 4.50, icone: "🍌", bg: "bg-yellow-100", color: "text-yellow-600" },
     { id: 'aveia', nome: "Aveia em flocos 500g", loja: "Mercadinho", preco: 8.90, icone: "🥣", bg: "bg-blue-100", color: "text-blue-600" }
   ]);
   
-  const [shoppingList, setShoppingList] = useState([]);
+  // A Matemática Mágica!
+  const valorPlanejado = shoppingList.reduce((acc, item) => acc + item.preco, 0); // Soma TUDO (480 + adicionais)
+  const valorGasto = shoppingList.reduce((acc, item) => item.bought ? acc + item.preco : acc, 0); // Soma só os com CHECK
 
-  // Lógica de transferir os itens
+  // Transferir da Home para a Lista de Compras
   const handleAddToList = (item) => {
-    setShoppingList([...shoppingList, item]);
+    setShoppingList([...shoppingList, { ...item, origin: 'user', bought: false }]);
     setHomeItems(homeItems.filter(i => i.id !== item.id));
   };
 
+  // Remover da Lista de Compras (volta pra Home)
   const handleRemoveFromList = (item) => {
     setHomeItems([...homeItems, item]);
     setShoppingList(shoppingList.filter(i => i.id !== item.id));
+  };
+
+  // Marcar/Desmarcar o Check do carrinho
+  const handleToggleBought = (item) => {
+    setShoppingList(shoppingList.map(i => i.id === item.id ? { ...i, bought: !i.bought } : i));
   };
 
   const handleLogout = () => {
@@ -58,7 +75,14 @@ export default function App() {
         )}
         
         {currentScreen === 'home' && (
-          <HomeScreen onLogout={handleLogout} userData={userData} homeItems={homeItems} onAddToList={handleAddToList} />
+          <HomeScreen 
+            onLogout={handleLogout} 
+            userData={userData} 
+            homeItems={homeItems} 
+            onAddToList={handleAddToList}
+            valorPlanejado={valorPlanejado}
+            valorGasto={valorGasto}
+          />
         )}
         
         {currentScreen === 'dieta' && (
@@ -72,6 +96,7 @@ export default function App() {
             homeItems={homeItems} 
             onAdd={handleAddToList} 
             onRemove={handleRemoveFromList} 
+            onToggleBought={handleToggleBought}
           />
         )}
         
@@ -83,7 +108,6 @@ export default function App() {
           <PerfilScreen onLogout={handleLogout} userData={userData} setUserData={setUserData} />
         )}
         
-        {/* O Menu inferior SOME se estivermos no login ou na tela de lista de compras! */}
         {currentScreen !== 'login' && currentScreen !== 'listaCompras' && (
           <BottomNav currentScreen={currentScreen} setCurrentScreen={setCurrentScreen} />
         )}
