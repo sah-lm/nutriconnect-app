@@ -85,10 +85,10 @@ export default function PerfilScreen({ onLogout, userData, setUserData }) {
           </div>
 
           <div>
-            <p className="text-xs text-gray-500">Orçamento Disponível (R$)</p>
+            <p className="text-xs text-gray-500">Orçamento Disponível (Total R$)</p>
             {isEditing ? (
-              <input type="number" value={editForm.budget} onChange={(e) => handleChange(e, 'budget')} className="w-full font-bold text-sm border-b" />
-            ) : <p className="font-bold text-gray-800 text-sm">R$ {userData.budget}</p>}
+              <input type="number" value={editForm.totalBudget} onChange={(e) => handleChange(e, 'totalBudget')} className="w-full font-bold text-sm border-b" />
+            ) : <p className="font-bold text-gray-800 text-sm">R$ {userData.totalBudget}</p>}
           </div>
 
           <div>

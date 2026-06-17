@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { PlusCircle, LogOut } from 'lucide-react';
 
-export default function HomeScreen({ onLogout, userData }) {
+export default function HomeScreen({ onLogout, userData, homeItems, onAddToList }) {
   const [showMenu, setShowMenu] = useState(false);
   const [proximaRefeicao, setProximaRefeicao] = useState(null);
 
@@ -24,7 +24,7 @@ export default function HomeScreen({ onLogout, userData }) {
   }, []);
 
   const primeiroNome = userData.name.split(' ')[0] || 'Usuário';
-  const orcamentoGasto = (userData.budget / userData.totalBudget) * 100;
+  const orcamentoGasto = (userData.spent / userData.totalBudget) * 100;
 
   return (
     <div className="h-full overflow-y-auto pb-24 bg-gray-50">
@@ -61,11 +61,11 @@ export default function HomeScreen({ onLogout, userData }) {
             <span className="text-gray-400 text-sm font-medium">Atual</span>
           </div>
           <div className="flex justify-between text-sm mb-1">
-            <span className="text-gray-800 font-semibold">R$ {userData.budget}</span>
-            <span className="text-gray-500">R$ {userData.totalBudget}</span>
+            <span className="text-gray-800 font-semibold">Gasto: R$ {userData.spent}</span>
+            <span className="text-gray-500">Total: R$ {userData.totalBudget}</span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-3 mb-2">
-            <div className={`bg-green-500 h-3 rounded-full`} style={{ width: `${orcamentoGasto}%` }}></div>
+            <div className={`bg-green-500 h-3 rounded-full transition-all`} style={{ width: `${Math.min(orcamentoGasto, 100)}%` }}></div>
           </div>
         </div>
       </div>
@@ -87,30 +87,25 @@ export default function HomeScreen({ onLogout, userData }) {
       )}
 
       <div className="px-6 mt-6">
-        <h2 className="font-bold text-gray-800 mb-3 text-sm">ECONOMIA (SUGESTÕES)</h2>
+        <h2 className="font-bold text-gray-800 mb-3 text-sm">SUGESTÕES DE ECONOMIA</h2>
         <div className="flex gap-4 overflow-x-auto pb-2 -mx-6 px-6 snap-x">
-          <div className="min-w-[150px] bg-white rounded-2xl p-3 shadow-sm border border-gray-100 snap-start relative">
-            <div className="w-full h-24 bg-red-100 rounded-xl mb-3 overflow-hidden">
-               <div className="w-full h-full bg-red-800/20 flex items-center justify-center text-2xl">🥩</div>
-            </div>
-            <p className="text-[10px] text-gray-400 font-semibold">Supermercado Central</p>
-            <p className="font-bold text-gray-800 text-sm leading-tight mb-1">Patinho moído <br/>500g</p>
-            <p className="font-bold text-green-600">R$ 20,80</p>
-            <button className="absolute bottom-3 right-3 w-7 h-7 bg-green-500 rounded-lg flex items-center justify-center text-white">
-              <PlusCircle size={16} />
-            </button>
-          </div>
-          <div className="min-w-[150px] bg-white rounded-2xl p-3 shadow-sm border border-gray-100 snap-start relative">
-            <div className="w-full h-24 bg-yellow-100 rounded-xl mb-3 overflow-hidden">
-              <div className="w-full h-full bg-yellow-600/20 flex items-center justify-center text-2xl">🍌</div>
-            </div>
-            <p className="text-[10px] text-gray-400 font-semibold">Hortifrúti do Bairro</p>
-            <p className="font-bold text-gray-800 text-sm leading-tight mb-1">Cacho de <br/>banana-prata</p>
-            <p className="font-bold text-green-600">R$ 4,50</p>
-            <button className="absolute bottom-3 right-3 w-7 h-7 bg-green-500 rounded-lg flex items-center justify-center text-white">
-              <PlusCircle size={16} />
-            </button>
-          </div>
+          {homeItems.length === 0 ? (
+            <p className="text-sm text-gray-500 italic bg-white p-4 rounded-xl shadow-sm w-full text-center">Todos os itens foram para a lista de compras!</p>
+          ) : (
+            homeItems.map(item => (
+              <div key={item.id} className="min-w-[150px] bg-white rounded-2xl p-3 shadow-sm border border-gray-100 snap-start relative">
+                <div className={`w-full h-24 ${item.bg} rounded-xl mb-3 overflow-hidden`}>
+                   <div className={`w-full h-full ${item.color} flex items-center justify-center text-2xl`}>{item.icone}</div>
+                </div>
+                <p className="text-[10px] text-gray-400 font-semibold truncate">{item.loja}</p>
+                <p className="font-bold text-gray-800 text-sm leading-tight mb-1">{item.nome}</p>
+                <p className="font-bold text-green-600">R$ {item.preco.toFixed(2).replace('.', ',')}</p>
+                <button onClick={() => onAddToList(item)} className="absolute bottom-3 right-3 w-7 h-7 bg-green-500 rounded-lg flex items-center justify-center text-white hover:bg-green-600">
+                  <PlusCircle size={16} />
+                </button>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { RefreshCw, CheckSquare, Square } from 'lucide-react';
+import { CheckSquare, Square } from 'lucide-react';
 
-export default function DietaScreen() {
+export default function DietaScreen({ onOpenListaCompras }) {
   const [diaSelecionado, setDiaSelecionado] = useState(0);
   const [checkedItems, setCheckedItems] = useState({});
 
@@ -47,7 +47,10 @@ export default function DietaScreen() {
       <div className="bg-white px-6 pt-8 pb-4 rounded-b-[30px] shadow-sm z-10">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-xl font-bold text-gray-800">Dieta semanal</h1>
-          <button className="bg-green-500 text-white text-xs font-semibold px-4 py-2 rounded-full hover:bg-green-600 transition-colors">
+          <button 
+            onClick={onOpenListaCompras}
+            className="bg-green-500 text-white text-xs font-semibold px-4 py-2 rounded-full hover:bg-green-600 transition-colors"
+          >
             Lista de compras
           </button>
         </div>
@@ -77,9 +80,6 @@ export default function DietaScreen() {
               <p className="text-xs text-gray-500">{ref.kcal}</p>
             </div>
             <div className="flex gap-2">
-              <button className="w-10 h-10 rounded-xl bg-green-50 text-green-600 flex items-center justify-center hover:bg-green-100 transition">
-                <RefreshCw size={18} />
-              </button>
               <button 
                 onClick={() => toggleCheck(ref.id)}
                 className={`w-10 h-10 rounded-xl flex items-center justify-center transition border-2 ${
