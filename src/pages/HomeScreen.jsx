@@ -25,8 +25,10 @@ export default function HomeScreen({ onLogout, userData, homeItems, onAddToList,
 
   const primeiroNome = userData.name.split(' ')[0] || 'Usuário';
   
-  // A barra enche baseada no valor total planejado na lista de compras comparado ao orçamento
   const orcamentoGasto = (valorPlanejado / userData.totalBudget) * 100;
+  // Lógica para deixar a barra vermelha se passar de 100%
+  const estourouOrcamento = orcamentoGasto > 100;
+  const corBarra = estourouOrcamento ? 'bg-red-500' : 'bg-green-500';
 
   return (
     <div className="h-full overflow-y-auto pb-24 bg-gray-50">
@@ -63,11 +65,13 @@ export default function HomeScreen({ onLogout, userData, homeItems, onAddToList,
             <span className="text-gray-400 text-sm font-medium">Atual</span>
           </div>
           <div className="flex justify-between text-sm mb-1">
-            <span className="text-gray-800 font-semibold">Lista: R$ {valorPlanejado.toFixed(2).replace('.', ',')}</span>
+            <span className={`font-semibold ${estourouOrcamento ? 'text-red-500' : 'text-gray-800'}`}>
+              Lista: R$ {valorPlanejado.toFixed(2).replace('.', ',')}
+            </span>
             <span className="text-gray-500">Total: R$ {userData.totalBudget}</span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-3 mb-2">
-            <div className={`bg-green-500 h-3 rounded-full transition-all`} style={{ width: `${Math.min(orcamentoGasto, 100)}%` }}></div>
+            <div className={`${corBarra} h-3 rounded-full transition-all`} style={{ width: `${Math.min(orcamentoGasto, 100)}%` }}></div>
           </div>
           <p className="text-xs text-gray-500 font-medium text-right">
             Comprado no mercado: <span className="font-bold text-green-600">R$ {valorGasto.toFixed(2).replace('.', ',')}</span>

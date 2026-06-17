@@ -14,7 +14,7 @@ export default function App() {
     name: 'João Silva',
     age: '26',
     email: '',
-    totalBudget: 1000,
+    totalBudget: 500, // Alterei para 500 para a apresentação bater direitinho com o limite!
     weight: '79.4',
     height: '1.82',
     fat: '12.5',

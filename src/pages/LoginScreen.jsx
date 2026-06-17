@@ -20,6 +20,12 @@ export default function LoginScreen({ onLogin, setUserData, userData }) {
         return;
       }
       setUserData({ ...userData, name: name });
+    } else {
+      // VALIDAÇÃO FIXA PARA A APRESENTAÇÃO
+      if (email !== 'teste@nutri.com' || password !== '123456') {
+        setErrorMsg('E-mail ou senha incorretos! Use os dados da dica.');
+        return;
+      }
     }
     
     setErrorMsg('');
@@ -37,6 +43,14 @@ export default function LoginScreen({ onLogin, setUserData, userData }) {
       </p>
       
       <div className="w-full space-y-4">
+        {!isRegistering && (
+          <div className="w-full bg-blue-50 border border-blue-200 text-blue-700 p-3 rounded-xl text-sm text-center">
+            <strong>Dica de acesso:</strong><br />
+            E-mail: teste@nutri.com<br />
+            Senha: 123456
+          </div>
+        )}
+
         {isRegistering && (
           <input 
             type="text" placeholder="Seu nome completo" 
