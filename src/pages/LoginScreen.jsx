@@ -1,20 +1,29 @@
 import React, { useState } from 'react';
 import { Utensils } from 'lucide-react';
 
-export default function LoginScreen({ onLogin }) {
+export default function LoginScreen({ onLogin, setUserData, userData }) {
   const [isRegistering, setIsRegistering] = useState(false);
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
 
   const handleAuth = () => {
-    // Lógica fictícia: Só deixa entrar se tiver digitado algo
     if (email === '' || password === '') {
-      setErrorMsg('Por favor, preencha todos os campos!');
+      setErrorMsg('Preencha os campos obrigatórios!');
       return;
     }
+    
+    if (isRegistering) {
+      if (name === '') {
+        setErrorMsg('Por favor, digite seu nome!');
+        return;
+      }
+      setUserData({ ...userData, name: name });
+    }
+    
     setErrorMsg('');
-    onLogin(); // Chama a função que muda para a tela Home
+    onLogin();
   };
 
   return (
@@ -31,6 +40,7 @@ export default function LoginScreen({ onLogin }) {
         {isRegistering && (
           <input 
             type="text" placeholder="Seu nome completo" 
+            value={name} onChange={(e) => setName(e.target.value)}
             className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-50"
           />
         )}
