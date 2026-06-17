@@ -3,7 +3,6 @@ import { ArrowLeft, Trash2, PlusCircle, ShoppingBag, CheckSquare, Square } from 
 
 export default function ListaComprasScreen({ onBack, shoppingList, homeItems, onAdd, onRemove, onToggleBought }) {
   
-  // Separando itens da nutri e itens do usuário
   const itensNutri = shoppingList.filter(item => item.origin === 'nutri');
   const itensUser = shoppingList.filter(item => item.origin === 'user');
 
@@ -54,6 +53,14 @@ export default function ListaComprasScreen({ onBack, shoppingList, homeItems, on
                   <button onClick={() => onToggleBought(item)} className={`${item.bought ? 'text-green-500' : 'text-gray-300 hover:text-green-500'}`}>
                     {item.bought ? <CheckSquare size={24} /> : <Square size={24} />}
                   </button>
+                  
+                  {/* Mini imagem do item adicionado */}
+                  {item.imagem && (
+                    <div className={`w-10 h-10 rounded-lg overflow-hidden shrink-0 bg-gray-200 ${item.bought ? 'opacity-50' : 'opacity-100'}`}>
+                      <img src={item.imagem} alt={item.nome} className="w-full h-full object-cover" />
+                    </div>
+                  )}
+
                   <div>
                     <p className={`font-bold text-sm leading-tight ${item.bought ? 'text-gray-500 line-through' : 'text-gray-800'}`}>{item.nome}</p>
                     <p className="text-xs text-blue-600 font-bold mt-1">R$ {item.preco.toFixed(2).replace('.', ',')}</p>
@@ -79,7 +86,10 @@ export default function ListaComprasScreen({ onBack, shoppingList, homeItems, on
             homeItems.map(item => (
               <div key={item.id} className="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between opacity-80 hover:opacity-100 transition-opacity">
                 <div className="flex items-center gap-3">
-                  <div className={`w-12 h-12 ${item.bg} rounded-xl flex items-center justify-center text-xl`}>{item.icone}</div>
+                  {/* IMAGEM JPG AQUI */}
+                  <div className="w-12 h-12 bg-gray-200 rounded-xl flex items-center justify-center overflow-hidden shrink-0">
+                    <img src={item.imagem} alt={item.nome} className="w-full h-full object-cover" />
+                  </div>
                   <div>
                     <p className="text-[10px] text-gray-400 font-semibold leading-tight">{item.loja}</p>
                     <p className="font-bold text-gray-800 text-sm leading-tight">{item.nome}</p>

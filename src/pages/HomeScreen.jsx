@@ -26,7 +26,6 @@ export default function HomeScreen({ onLogout, userData, homeItems, onAddToList,
   const primeiroNome = userData.name.split(' ')[0] || 'Usuário';
   
   const orcamentoGasto = (valorPlanejado / userData.totalBudget) * 100;
-  // Lógica para deixar a barra vermelha se passar de 100%
   const estourouOrcamento = orcamentoGasto > 100;
   const corBarra = estourouOrcamento ? 'bg-red-500' : 'bg-green-500';
 
@@ -103,8 +102,9 @@ export default function HomeScreen({ onLogout, userData, homeItems, onAddToList,
           ) : (
             homeItems.map(item => (
               <div key={item.id} className="min-w-[150px] bg-white rounded-2xl p-3 shadow-sm border border-gray-100 snap-start relative">
-                <div className={`w-full h-24 ${item.bg} rounded-xl mb-3 overflow-hidden`}>
-                   <div className={`w-full h-full ${item.color} flex items-center justify-center text-2xl`}>{item.icone}</div>
+                {/* AQUI ESTÁ A IMAGEM JPG */}
+                <div className="w-full h-24 bg-gray-200 rounded-xl mb-3 overflow-hidden">
+                   <img src={item.imagem} alt={item.nome} className="w-full h-full object-cover" />
                 </div>
                 <p className="text-[10px] text-gray-400 font-semibold truncate">{item.loja}</p>
                 <p className="font-bold text-gray-800 text-sm leading-tight mb-1">{item.nome}</p>

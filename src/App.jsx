@@ -14,7 +14,7 @@ export default function App() {
     name: 'João Silva',
     age: '26',
     email: '',
-    totalBudget: 500, // Alterei para 500 para a apresentação bater direitinho com o limite!
+    totalBudget: 500,
     weight: '79.4',
     height: '1.82',
     fat: '12.5',
@@ -23,8 +23,6 @@ export default function App() {
     calories: '2.950'
   });
 
-  // O NOSSO BANCO DE DADOS DA LISTA DE COMPRAS
-  // Começamos com os itens fixos da Nutri, que juntos dão R$ 480!
   const [shoppingList, setShoppingList] = useState([
     { id: 'n1', nome: "Filé de Frango (3kg)", preco: 150.00, origin: 'nutri', bought: false },
     { id: 'n2', nome: "Ovos (3 dúzias)", preco: 50.00, origin: 'nutri', bought: false },
@@ -35,29 +33,26 @@ export default function App() {
     { id: 'n7', nome: "Patinho (3kg)", preco: 140.00, origin: 'nutri', bought: false }
   ]);
 
+  // AQUI DEFINIMOS AS IMAGENS JPG
   const [homeItems, setHomeItems] = useState([
-    { id: 'patinho_promo', nome: "Patinho moído 500g", loja: "Supermercado Central", preco: 20.80, icone: "🥩", bg: "bg-red-100", color: "text-red-800" },
-    { id: 'banana', nome: "Cacho de banana-prata", loja: "Hortifrúti do Bairro", preco: 4.50, icone: "🍌", bg: "bg-yellow-100", color: "text-yellow-600" },
-    { id: 'aveia', nome: "Aveia em flocos 500g", loja: "Mercadinho", preco: 8.90, icone: "🥣", bg: "bg-blue-100", color: "text-blue-600" }
+    { id: 'patinho_promo', nome: "Patinho moído 500g", loja: "Supermercado Central", preco: 20.80, imagem: "imagens/patinho.jpg" },
+    { id: 'banana', nome: "Cacho de banana-prata", loja: "Hortifrúti do Bairro", preco: 4.50, imagem: "imagens/banana.jpg" },
+    { id: 'aveia', nome: "Aveia em flocos 500g", loja: "Mercadinho", preco: 8.90, imagem: "imagens/aveia.jpg" }
   ]);
   
-  // A Matemática Mágica!
-  const valorPlanejado = shoppingList.reduce((acc, item) => acc + item.preco, 0); // Soma TUDO (480 + adicionais)
-  const valorGasto = shoppingList.reduce((acc, item) => item.bought ? acc + item.preco : acc, 0); // Soma só os com CHECK
+  const valorPlanejado = shoppingList.reduce((acc, item) => acc + item.preco, 0); 
+  const valorGasto = shoppingList.reduce((acc, item) => item.bought ? acc + item.preco : acc, 0); 
 
-  // Transferir da Home para a Lista de Compras
   const handleAddToList = (item) => {
     setShoppingList([...shoppingList, { ...item, origin: 'user', bought: false }]);
     setHomeItems(homeItems.filter(i => i.id !== item.id));
   };
 
-  // Remover da Lista de Compras (volta pra Home)
   const handleRemoveFromList = (item) => {
     setHomeItems([...homeItems, item]);
     setShoppingList(shoppingList.filter(i => i.id !== item.id));
   };
 
-  // Marcar/Desmarcar o Check do carrinho
   const handleToggleBought = (item) => {
     setShoppingList(shoppingList.map(i => i.id === item.id ? { ...i, bought: !i.bought } : i));
   };
